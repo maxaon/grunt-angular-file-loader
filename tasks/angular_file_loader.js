@@ -11,7 +11,6 @@
 var ngDeps = require('ng-dependencies');
 var toposort = require('toposort');
 var path = require('path');
-var EOL = require('os').EOL;
 
 module.exports = function (grunt) {
 
@@ -156,7 +155,10 @@ module.exports = function (grunt) {
                 sortedScripts = sortScripts();
             }
 
-            var splitedFile = (grunt.file.read(file)).split(supportedExt[pattern]["regex"]);
+            var fileContent = grunt.file.read(file);
+            var splitedFile = (fileContent).split(supportedExt[pattern]["regex"]);
+            var EOL = /\r\n/g.test(fileContent) ? '\r\n' : '\n';
+
 
             splitedFile[1] = supportedExt[pattern]["comment"]["start"] + options.startTag + supportedExt[pattern]["comment"]["end"] + EOL;
             sortedScripts.forEach(function (script) {
